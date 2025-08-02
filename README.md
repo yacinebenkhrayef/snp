@@ -1,5 +1,44 @@
 # Leveraging Graph Databases in HR Systems using Neo4j
 
+
+## Objective: 
+To model HR data as a graph and explore the use of graph databases (Neo4j) to uncover hidden patterns in hiring, team dynamics, and employee mobility. 
+
+
+## Background: 
+Traditional relational databases fail to capture the complexity of real-world RH interactions: 
+referrals, role transitions, skill overlaps, team dependencies. Graph databases enable more powerful queries and visual analytics. 
+
+
+#### Tasks: 
+● Study existing HR data structure (candidates, employees, skills, roles, relationships). 
+● Model it using graph structures (nodes: people, skills, jobs; edges: has_skill, worked_with, referred_by, etc.). 
+● Implement graph database using Neo4j or similar. 
+● Create meaningful queries: 
+      ○ Find best internal candidates for a new position. 
+      ○ Identify influencers or knowledge hubs in the company. 
+      ○ Visualize hiring bottlenecks or skill gaps. 
+● Optionally build a simple dashboard for query access. 
+
+
+#### Expected Outcome: 
+● A functional graph database implementation. 
+● A set of high-value queries and insights. 
+● Prototype dashboard or visualization. 
+● A report demonstrating the benefits of graph modeling for HR. 
+
+
+
+#### Skills Required: 
+● Graph database experience (Neo4j, Cypher) 
+● Data modeling 
+● Some HR context knowledge 
+● Data visualization (e.g., D3.js, Plotly, or Neo4j Bloom)
+
+
+
+
+
 ### data
 Here’s a summary of why this dataset is an excellent foundation for the project:
 
