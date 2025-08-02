@@ -1,0 +1,162 @@
+// 1. Clear existing data to start fresh.
+MATCH (n)
+DETACH DELETE n;
+
+// 2. Create constraints for unique identifiers.
+CREATE CONSTRAINT FOR (p:Person) REQUIRE p.id IS UNIQUE;
+CREATE CONSTRAINT FOR (d:Department) REQUIRE d.id IS UNIQUE;
+CREATE CONSTRAINT FOR (t:Team) REQUIRE t.id IS UNIQUE;
+CREATE CONSTRAINT FOR (r:Role) REQUIRE r.id IS UNIQUE;
+CREATE CONSTRAINT FOR (c:Competency) REQUIRE c.id IS UNIQUE;
+CREATE CONSTRAINT FOR (j:Project) REQUIRE j.id IS UNIQUE;
+
+// 3. Create Department nodes
+CREATE (d1:Department {id: 'D01', name: 'Engineering'});
+CREATE (d2:Department {id: 'D02', name: 'Marketing'});
+CREATE (d3:Department {id: 'D03', name: 'Human Resources'});
+CREATE (d4:Department {id: 'D04', name: 'Sales'});
+CREATE (d5:Department {id: 'D05', name: 'Product Management'});
+CREATE (d6:Department {id: 'D06', name: 'Finance'});
+
+// 4. Create Team nodes
+CREATE (t1:Team {id: 'T01', name: 'Backend Dev Team'});
+CREATE (t2:Team {id: 'T02', name: 'Frontend Dev Team'});
+CREATE (t3:Team {id: 'T03', name: 'Digital Marketing'});
+CREATE (t4:Team {id: 'T04', name: 'Recruitment'});
+CREATE (t5:Team {id: 'T05', name: 'Sales Strategy'});
+CREATE (t6:Team {id: 'T06', name: 'Product Growth'});
+
+// 5. Create new Project nodes
+CREATE (j1:Project {id: 'J01', name: 'Project Alpha', start_date: '2023-01-10', status: 'In Progress'});
+CREATE (j2:Project {id: 'J02', name: 'Project Beta', start_date: '2023-03-01', status: 'In Progress'});
+CREATE (j3:Project {id: 'J03', name: 'Campaign A', start_date: '2023-05-01', status: 'In Progress'});
+CREATE (j4:Project {id: 'J04', name: 'Q1 Hiring', start_date: '2023-01-01', status: 'Completed'});
+CREATE (j5:Project {id: 'J05', name: 'Next Gen Product', start_date: '2023-06-01', status: 'In Progress'});
+
+// 6. Create enhanced Person nodes with IBM Attrition dataset properties
+CREATE (p1:Person {id:1, first_name:'Ellis', last_name:'Blair', email:'ellis.blair@company.com', hire_date:'2018-05-15', is_manager:true, location: 'New York', education_level: 'Master', start_date_current_role: '2022-03-01', attrition: false, job_satisfaction: 4, environment_satisfaction: 4, work_life_balance: 3, performance_rating: 4, distance_from_home: 10, business_travel: 'Travel_Rarely', marital_status: 'Married', total_working_years: 15, years_at_company: 7, years_in_current_role: 3, years_since_last_promotion: 1, years_with_current_manager: 3});
+CREATE (p2:Person {id:2, first_name:'Mike', last_name:'Houston', email:'mike.houston@company.com', hire_date:'2019-01-20', is_manager:false, location: 'New York', education_level: 'Bachelor', start_date_current_role: '2019-01-20', attrition: false, job_satisfaction: 3, environment_satisfaction: 3, work_life_balance: 2, performance_rating: 3, distance_from_home: 5, business_travel: 'Travel_Rarely', marital_status: 'Single', total_working_years: 6, years_at_company: 6, years_in_current_role: 5, years_since_last_promotion: 0, years_with_current_manager: 3});
+CREATE (p3:Person {id:3, first_name:'Chad', last_name:'Gardner', email:'chad.gardner@company.com', hire_date:'2020-03-10', is_manager:false, location: 'New York', education_level: 'Bachelor', start_date_current_role: '2020-03-10', attrition: false, job_satisfaction: 4, environment_satisfaction: 2, work_life_balance: 3, performance_rating: 3, distance_from_home: 15, business_travel: 'Travel_Rarely', marital_status: 'Married', total_working_years: 5, years_at_company: 5, years_in_current_role: 5, years_since_last_promotion: 1, years_with_current_manager: 3});
+CREATE (p4:Person {id:4, first_name:'Francisco', last_name:'Morales', email:'francisco.morales@company.com', hire_date:'2021-06-01', is_manager:false, location: 'New York', education_level: 'Bachelor', start_date_current_role: '2021-06-01', attrition: false, job_satisfaction: 2, environment_satisfaction: 3, work_life_balance: 4, performance_rating: 3, distance_from_home: 2, business_travel: 'Non-Travel', marital_status: 'Single', total_working_years: 4, years_at_company: 4, years_in_current_role: 4, years_since_last_promotion: 0, years_with_current_manager: 3});
+CREATE (p5:Person {id:5, first_name:'Wilbur', last_name:'Ford', email:'wilbur.ford@company.com', hire_date:'2022-09-12', is_manager:false, location: 'San Francisco', education_level: 'Bachelor', start_date_current_role: '2022-09-12', attrition: true, job_satisfaction: 1, environment_satisfaction: 2, work_life_balance: 1, performance_rating: 3, distance_from_home: 25, business_travel: 'Travel_Frequently', marital_status: 'Divorced', total_working_years: 2, years_at_company: 2, years_in_current_role: 2, years_since_last_promotion: 0, years_with_current_manager: 2});
+CREATE (p6:Person {id:6, first_name:'Drew', last_name:'Gill', email:'drew.gill@company.com', hire_date:'2020-11-05', is_manager:true, location: 'San Francisco', education_level: 'Master', start_date_current_role: '2020-11-05', attrition: false, job_satisfaction: 4, environment_satisfaction: 4, work_life_balance: 3, performance_rating: 4, distance_from_home: 8, business_travel: 'Travel_Rarely', marital_status: 'Married', total_working_years: 10, years_at_company: 5, years_in_current_role: 5, years_since_last_promotion: 1, years_with_current_manager: 5});
+CREATE (p7:Person {id:7, first_name:'Kyle', last_name:'Kelly', email:'kyle.kelly@company.com', hire_date:'2019-08-23', is_manager:false, location: 'San Francisco', education_level: 'Bachelor', start_date_current_role: '2019-08-23', attrition: false, job_satisfaction: 3, environment_satisfaction: 3, work_life_balance: 2, performance_rating: 3, distance_from_home: 12, business_travel: 'Travel_Rarely', marital_status: 'Single', total_working_years: 6, years_at_company: 6, years_in_current_role: 6, years_since_last_promotion: 1, years_with_current_manager: 5});
+CREATE (p8:Person {id:8, first_name:'Jon', last_name:'Jackson', email:'jon.jackson@company.com', hire_date:'2021-02-14', is_manager:false, location: 'San Francisco', education_level: 'Bachelor', start_date_current_role: '2021-02-14', attrition: false, job_satisfaction: 2, environment_satisfaction: 3, work_life_balance: 4, performance_rating: 3, distance_from_home: 18, business_travel: 'Non-Travel', marital_status: 'Married', total_working_years: 4, years_at_company: 4, years_in_current_role: 4, years_since_last_promotion: 0, years_with_current_manager: 5});
+CREATE (p9:Person {id:9, first_name:'Rafael', last_name:'Fowler', email:'rafael.fowler@company.com', hire_date:'2022-01-30', is_manager:false, location: 'San Francisco', education_level: 'Bachelor', start_date_current_role: '2022-01-30', attrition: true, job_satisfaction: 1, environment_satisfaction: 2, work_life_balance: 1, performance_rating: 3, distance_from_home: 3, business_travel: 'Travel_Frequently', marital_status: 'Single', total_working_years: 3, years_at_company: 3, years_in_current_role: 3, years_since_last_promotion: 0, years_with_current_manager: 2});
+CREATE (p10:Person {id:10, first_name:'Casey', last_name:'Murray', email:'casey.murray@company.com', hire_date:'2017-07-01', is_manager:true, location: 'London', education_level: 'Master', start_date_current_role: '2020-05-15', attrition: false, job_satisfaction: 4, environment_satisfaction: 4, work_life_balance: 3, performance_rating: 4, distance_from_home: 7, business_travel: 'Travel_Rarely', marital_status: 'Married', total_working_years: 12, years_at_company: 8, years_in_current_role: 5, years_since_last_promotion: 2, years_with_current_manager: 5});
+CREATE (p11:Person {id:11, first_name:'Angelo', last_name:'Bowman', email:'angelo.bowman@company.com', hire_date:'2018-02-28', is_manager:false, location: 'London', education_level: 'Bachelor', start_date_current_role: '2018-02-28', attrition: false, job_satisfaction: 3, environment_satisfaction: 3, work_life_balance: 2, performance_rating: 3, distance_from_home: 9, business_travel: 'Travel_Rarely', marital_status: 'Single', total_working_years: 7, years_at_company: 7, years_in_current_role: 7, years_since_last_promotion: 0, years_with_current_manager: 5});
+CREATE (p12:Person {id:12, first_name:'James', last_name:'Todd', email:'james.todd@company.com', hire_date:'2020-04-16', is_manager:false, location: 'London', education_level: 'Bachelor', start_date_current_role: '2020-04-16', attrition: false, job_satisfaction: 4, environment_satisfaction: 2, work_life_balance: 3, performance_rating: 3, distance_from_home: 14, business_travel: 'Travel_Rarely', marital_status: 'Married', total_working_years: 5, years_at_company: 5, years_in_current_role: 5, years_since_last_promotion: 1, years_with_current_manager: 5});
+CREATE (p13:Person {id:13, first_name:'Rodolfo', last_name:'Gregory', email:'rodolfo.gregory@company.com', hire_date:'2021-08-09', is_manager:false, location: 'London', education_level: 'Bachelor', start_date_current_role: '2021-08-09', attrition: true, job_satisfaction: 1, environment_satisfaction: 2, work_life_balance: 1, performance_rating: 3, distance_from_home: 22, business_travel: 'Travel_Frequently', marital_status: 'Single', total_working_years: 3, years_at_company: 3, years_in_current_role: 3, years_since_last_promotion: 0, years_with_current_manager: 2});
+CREATE (p14:Person {id:14, first_name:'Raymond', last_name:'Wong', email:'raymond.wong@company.com', hire_date:'2019-12-05', is_manager:false, location: 'London', education_level: 'Master', start_date_current_role: '2019-12-05', attrition: false, job_satisfaction: 3, environment_satisfaction: 3, work_life_balance: 4, performance_rating: 3, distance_from_home: 6, business_travel: 'Non-Travel', marital_status: 'Divorced', total_working_years: 6, years_at_company: 6, years_in_current_role: 6, years_since_last_promotion: 1, years_with_current_manager: 5});
+CREATE (p15:Person {id:15, first_name:'Ross', last_name:'Olson', email:'ross.olson@company.com', hire_date:'2017-10-18', is_manager:true, location: 'New York', education_level: 'Master', start_date_current_role: '2019-01-01', attrition: false, job_satisfaction: 4, environment_satisfaction: 4, work_life_balance: 3, performance_rating: 4, distance_from_home: 11, business_travel: 'Travel_Rarely', marital_status: 'Married', total_working_years: 16, years_at_company: 8, years_in_current_role: 6, years_since_last_promotion: 3, years_with_current_manager: 6});
+CREATE (p16:Person {id:16, first_name:'Duane', last_name:'Chavez', email:'duane.chavez@company.com', hire_date:'2018-07-22', is_manager:false, location: 'New York', education_level: 'Bachelor', start_date_current_role: '2018-07-22', attrition: false, job_satisfaction: 3, environment_satisfaction: 3, work_life_balance: 2, performance_rating: 3, distance_from_home: 19, business_travel: 'Travel_Rarely', marital_status: 'Single', total_working_years: 7, years_at_company: 7, years_in_current_role: 7, years_since_last_promotion: 0, years_with_current_manager: 6});
+CREATE (p17:Person {id:17, first_name:'Adam', last_name:'Hunter', email:'adam.hunter@company.com', hire_date:'2020-09-01', is_manager:false, location: 'New York', education_level: 'Bachelor', start_date_current_role: '2020-09-01', attrition: false, job_satisfaction: 4, environment_satisfaction: 2, work_life_balance: 3, performance_rating: 3, distance_from_home: 4, business_travel: 'Travel_Rarely', marital_status: 'Divorced', total_working_years: 5, years_at_company: 5, years_in_current_role: 5, years_since_last_promotion: 1, years_with_current_manager: 6});
+CREATE (p18:Person {id:18, first_name:'Darryl', last_name:'Brown', email:'darryl.brown@company.com', hire_date:'2021-04-25', is_manager:false, location: 'New York', education_level: 'Bachelor', start_date_current_role: '2021-04-25', attrition: true, job_satisfaction: 2, environment_satisfaction: 3, work_life_balance: 4, performance_rating: 3, distance_from_home: 28, business_travel: 'Travel_Frequently', marital_status: 'Married', total_working_years: 4, years_at_company: 4, years_in_current_role: 4, years_since_last_promotion: 0, years_with_current_manager: 2});
+CREATE (p19:Person {id:19, first_name:'Alberto', last_name:'Boone', email:'alberto.boone@company.com', hire_date:'2022-02-19', is_manager:false, location: 'San Francisco', education_level: 'Bachelor', start_date_current_role: '2022-02-19', attrition: true, job_satisfaction: 1, environment_satisfaction: 2, work_life_balance: 1, performance_rating: 3, distance_from_home: 1, business_travel: 'Non-Travel', marital_status: 'Single', total_working_years: 3, years_at_company: 3, years_in_current_role: 3, years_since_last_promotion: 0, years_with_current_manager: 2});
+CREATE (p20:Person {id:20, first_name:'Kelly', last_name:'Newton', email:'kelly.newton@company.com', hire_date:'2019-06-11', is_manager:true, location: 'San Francisco', education_level: 'Master', start_date_current_role: '2021-01-01', attrition: false, job_satisfaction: 4, environment_satisfaction: 4, work_life_balance: 3, performance_rating: 4, distance_from_home: 17, business_travel: 'Travel_Rarely', marital_status: 'Married', total_working_years: 11, years_at_company: 6, years_in_current_role: 4, years_since_last_promotion: 1, years_with_current_manager: 4});
+CREATE (p21:Person {id:21, first_name:'Lisa', last_name:'Green', email:'lisa.green@company.com', hire_date:'2019-03-20', is_manager:true, location: 'New York', education_level: 'Master', start_date_current_role: '2022-01-15', attrition: false, job_satisfaction: 4, environment_satisfaction: 3, work_life_balance: 3, performance_rating: 4, distance_from_home: 5, business_travel: 'Travel_Rarely', marital_status: 'Divorced', total_working_years: 10, years_at_company: 6, years_in_current_role: 3, years_since_last_promotion: 2, years_with_current_manager: 3});
+CREATE (p22:Person {id:22, first_name:'David', last_name:'Chen', email:'david.chen@company.com', hire_date:'2020-08-01', is_manager:false, location: 'New York', education_level: 'Bachelor', start_date_current_role: '2020-08-01', attrition: false, job_satisfaction: 3, environment_satisfaction: 4, work_life_balance: 2, performance_rating: 3, distance_from_home: 8, business_travel: 'Non-Travel', marital_status: 'Married', total_working_years: 5, years_at_company: 5, years_in_current_role: 5, years_since_last_promotion: 0, years_with_current_manager: 3});
+CREATE (p23:Person {id:23, first_name:'Emily', last_name:'Taylor', email:'emily.taylor@company.com', hire_date:'2021-05-10', is_manager:false, location: 'New York', education_level: 'Bachelor', start_date_current_role: '2021-05-10', attrition: true, job_satisfaction: 2, environment_satisfaction: 1, work_life_balance: 1, performance_rating: 3, distance_from_home: 21, business_travel: 'Travel_Frequently', marital_status: 'Single', total_working_years: 4, years_at_company: 4, years_in_current_role: 4, years_since_last_promotion: 0, years_with_current_manager: 3});
+
+// 7. Create Competency and Role nodes
+CREATE (s1:Competency {id: 'S01', name: 'Java Programming'});
+CREATE (s2:Competency {id: 'S02', name: 'Python Programming'});
+CREATE (s3:Competency {id: 'S03', name: 'Project Management'});
+CREATE (s4:Competency {id: 'S04', name: 'Data Visualization'});
+CREATE (s5:Competency {id: 'S05', name: 'Cypher'});
+CREATE (s6:Competency {id: 'S06', name: 'Digital Marketing'});
+CREATE (s7:Competency {id: 'S07', name: 'Recruitment'});
+CREATE (s8:Competency {id: 'S08', name: 'Financial Analysis'});
+CREATE (s9:Competency {id: 'S09', name: 'Data Modeling'});
+CREATE (s10:Competency {id: 'S10', name: 'Machine Learning'});
+
+CREATE (r1:Role {id: 'R01', title: 'Software Engineer', department_id: 'D01'});
+CREATE (r2:Role {id: 'R02', title: 'Senior Software Engineer', department_id: 'D01'});
+CREATE (r3:Role {id: 'R03', title: 'Engineering Manager', department_id: 'D01'});
+CREATE (r4:Role {id: 'R04', title: 'Marketing Specialist', department_id: 'D02'});
+CREATE (r5:Role {id: 'R05', title: 'Digital Marketing Manager', department_id: 'D02'});
+CREATE (r6:Role {id: 'R06', title: 'HR Generalist', department_id: 'D03'});
+CREATE (r7:Role {id: 'R07', title: 'Recruitment Specialist', department_id: 'D03'});
+CREATE (r8:Role {id: 'R08', title: 'Sales Manager', department_id: 'D04'});
+CREATE (r9:Role {id: 'R09', title: 'Data Scientist', department_id: 'D01'});
+CREATE (r10:Role {id: 'R10', title: 'Product Manager', department_id: 'D05'});
+CREATE (r11:Role {id: 'R11', title: 'Financial Analyst', department_id: 'D06'});
+
+// 8. Create relationships between nodes (department, team, role, and reporting structure)
+MATCH (p:Person {id:1}), (d:Department {id:'D01'}) CREATE (p)-[:IS_IN_DEPARTMENT]->(d);
+MATCH (p:Person {id:2}), (d:Department {id:'D01'}) CREATE (p)-[:IS_IN_DEPARTMENT]->(d);
+MATCH (p:Person {id:3}), (d:Department {id:'D01'}) CREATE (p)-[:IS_IN_DEPARTMENT]->(d);
+MATCH (p:Person {id:4}), (d:Department {id:'D01'}) CREATE (p)-[:IS_IN_DEPARTMENT]->(d);
+MATCH (p:Person {id:5}), (d:Department {id:'D01'}) CREATE (p)-[:IS_IN_DEPARTMENT]->(d);
+MATCH (p:Person {id:6}), (d:Department {id:'D01'}) CREATE (p)-[:IS_IN_DEPARTMENT]->(d);
+MATCH (p:Person {id:7}), (d:Department {id:'D01'}) CREATE (p)-[:IS_IN_DEPARTMENT]->(d);
+MATCH (p:Person {id:8}), (d:Department {id:'D01'}) CREATE (p)-[:IS_IN_DEPARTMENT]->(d);
+MATCH (p:Person {id:9}), (d:Department {id:'D01'}) CREATE (p)-[:IS_IN_DEPARTMENT]->(d);
+MATCH (p:Person {id:10}), (d:Department {id:'D02'}) CREATE (p)-[:IS_IN_DEPARTMENT]->(d);
+MATCH (p:Person {id:11}), (d:Department {id:'D02'}) CREATE (p)-[:IS_IN_DEPARTMENT]->(d);
+MATCH (p:Person {id:12}), (d:Department {id:'D02'}) CREATE (p)-[:IS_IN_DEPARTMENT]->(d);
+MATCH (p:Person {id:13}), (d:Department {id:'D02'}) CREATE (p)-[:IS_IN_DEPARTMENT]->(d);
+MATCH (p:Person {id:14}), (d:Department {id:'D02'}) CREATE (p)-[:IS_IN_DEPARTMENT]->(d);
+MATCH (p:Person {id:15}), (d:Department {id:'D03'}) CREATE (p)-[:IS_IN_DEPARTMENT]->(d);
+MATCH (p:Person {id:16}), (d:Department {id:'D03'}) CREATE (p)-[:IS_IN_DEPARTMENT]->(d);
+MATCH (p:Person {id:17}), (d:Department {id:'D03'}) CREATE (p)-[:IS_IN_DEPARTMENT]->(d);
+MATCH (p:Person {id:18}), (d:Department {id:'D03'}) CREATE (p)-[:IS_IN_DEPARTMENT]->(d);
+MATCH (p:Person {id:19}), (d:Department {id:'D04'}) CREATE (p)-[:IS_IN_DEPARTMENT]->(d);
+MATCH (p:Person {id:20}), (d:Department {id:'D04'}) CREATE (p)-[:IS_IN_DEPARTMENT]->(d);
+MATCH (p:Person {id:21}), (d:Department {id:'D05'}) CREATE (p)-[:IS_IN_DEPARTMENT]->(d);
+MATCH (p:Person {id:22}), (d:Department {id:'D06'}) CREATE (p)-[:IS_IN_DEPARTMENT]->(d);
+MATCH (p:Person {id:23}), (d:Department {id:'D06'}) CREATE (p)-[:IS_IN_DEPARTMENT]->(d);
+MATCH (p:Person {id:1}), (t:Team {id:'T01'}) CREATE (p)-[:IS_MEMBER_OF]->(t);
+MATCH (p:Person {id:2}), (t:Team {id:'T01'}) CREATE (p)-[:IS_MEMBER_OF]->(t);
+MATCH (p:Person {id:3}), (t:Team {id:'T01'}) CREATE (p)-[:IS_MEMBER_OF]->(t);
+MATCH (p:Person {id:4}), (t:Team {id:'T02'}) CREATE (p)-[:IS_MEMBER_OF]->(t);
+MATCH (p:Person {id:5}), (t:Team {id:'T02'}) CREATE (p)-[:IS_MEMBER_OF]->(t);
+MATCH (p:Person {id:6}), (t:Team {id:'T02'}) CREATE (p)-[:IS_MEMBER_OF]->(t);
+MATCH (p:Person {id:10}), (t:Team {id:'T03'}) CREATE (p)-[:IS_MEMBER_OF]->(t);
+MATCH (p:Person {id:11}), (t:Team {id:'T03'}) CREATE (p)-[:IS_MEMBER_OF]->(t);
+MATCH (p:Person {id:12}), (t:Team {id:'T03'}) CREATE (p)-[:IS_MEMBER_OF]->(t);
+MATCH (p:Person {id:15}), (t:Team {id:'T04'}) CREATE (p)-[:IS_MEMBER_OF]->(t);
+MATCH (p:Person {id:16}), (t:Team {id:'T04'}) CREATE (p)-[:IS_MEMBER_OF]->(t);
+MATCH (p:Person {id:19}), (t:Team {id:'T05'}) CREATE (p)-[:IS_MEMBER_OF]->(t);
+MATCH (p:Person {id:20}), (t:Team {id:'T05'}) CREATE (p)-[:IS_MEMBER_OF]->(t);
+MATCH (p:Person {id:21}), (t:Team {id:'T06'}) CREATE (p)-[:IS_MEMBER_OF]->(t);
+MATCH (p:Person {id:1}), (r:Role {id:'R03'}) CREATE (p)-[:HOLDS_ROLE]->(r);
+MATCH (p:Person {id:2}), (r:Role {id:'R02'}) CREATE (p)-[:HOLDS_ROLE]->(r);
+MATCH (p:Person {id:3}), (r:Role {id:'R01'}) CREATE (p)-[:HOLDS_ROLE]->(r);
+MATCH (p:Person {id:4}), (r:Role {id:'R01'}) CREATE (p)-[:HOLDS_ROLE]->(r);
+MATCH (p:Person {id:5}), (r:Role {id:'R01'}) CREATE (p)-[:HOLDS_ROLE]->(r);
+MATCH (p:Person {id:6}), (r:Role {id:'R02'}) CREATE (p)-[:HOLDS_ROLE]->(r);
+MATCH (p:Person {id:7}), (r:Role {id:'R01'}) CREATE (p)-[:HOLDS_ROLE]->(r);
+MATCH (p:Person {id:8}), (r:Role {id:'R01'}) CREATE (p)-[:HOLDS_ROLE]->(r);
+MATCH (p:Person {id:9}), (r:Role {id:'R01'}) CREATE (p)-[:HOLDS_ROLE]->(r);
+MATCH (p:Person {id:10}), (r:Role {id:'R05'}) CREATE (p)-[:HOLDS_ROLE]->(r);
+MATCH (p:Person {id:11}), (r:Role {id:'R04'}) CREATE (p)-[:HOLDS_ROLE]->(r);
+MATCH (p:Person {id:12}), (r:Role {id:'R04'}) CREATE (p)-[:HOLDS_ROLE]->(r);
+MATCH (p:Person {id:13}), (r:Role {id:'R04'}) CREATE (p)-[:HOLDS_ROLE]->(r);
+MATCH (p:Person {id:14}), (r:Role {id:'R04'}) CREATE (p)-[:HOLDS_ROLE]->(r);
+MATCH (p:Person {id:15}), (r:Role {id:'R06'}) CREATE (p)-[:HOLDS_ROLE]->(r);
+MATCH (p:Person {id:16}), (r:Role {id:'R07'}) CREATE (p)-[:HOLDS_ROLE]->(r);
+MATCH (p:Person {id:17}), (r:Role {id:'R06'}) CREATE (p)-[:HOLDS_ROLE]->(r);
+MATCH (p:Person {id:18}), (r:Role {id:'R06'}) CREATE (p)-[:HOLDS_ROLE]->(r);
+MATCH (p:Person {id:19}), (r:Role {id:'R08'}) CREATE (p)-[:HOLDS_ROLE]->(r);
+MATCH (p:Person {id:20}), (r:Role {id:'R08'}) CREATE (p)-[:HOLDS_ROLE]->(r);
+MATCH (p:Person {id:21}), (r:Role {id:'R10'}) CREATE (p)-[:HOLDS_ROLE]->(r);
+MATCH (p:Person {id:22}), (r:Role {id:'R11'}) CREATE (p)-[:HOLDS_ROLE]->(r);
+MATCH (p:Person {id:23}), (r:Role {id:'R11'}) CREATE (p)-[:HOLDS_ROLE]->(r);
+
+MATCH (manager:Person {id:1}), (employee:Person {id:2}) CREATE (employee)-[:REPORTS_TO]->(manager);
+MATCH (manager:Person {id:1}), (employee:Person {id:3}) CREATE (employee)-[:REPORTS_TO]->(manager);
+MATCH (manager:Person {id:1}), (employee:Person {id:4}) CREATE (employee)-[:REPORTS_TO]->(manager);
+MATCH (manager:Person {id:6}), (employee:Person {id:5}) CREATE (employee)-[:REPORTS_TO]->(manager);
+MATCH (manager:Person {id:6}), (employee:Person {id:7}) CREATE (employee)-[:REPORTS_TO]->(manager);
+MATCH (manager:Person {id:6}), (employee:Person {id:8}) CREATE (employee)-[:REPORTS_TO]->(manager);
+MATCH (manager:Person {id:6}), (employee:Person {id:9}) CREATE (employee)-[:REPORTS_TO]->(manager);
+MATCH (manager:Person {id:10}), (employee:Person {id:11}) CREATE (employee)-[:REPORTS_TO]->(manager);
+MATCH (manager:Person {id:10}), (employee:Person {id:12}) CREATE (employee)-[:REPORTS_TO]->(manager);
+MATCH (manager:Person {id:10}), (employee:Person {id:13}) CREATE (employee)-[:REPORTS_TO]->(manager);
+MATCH (manager:Person {id:15}), (employee:Person {id:16}) CREATE (employee)-[:REPORTS_TO]->(manager);
+MATCH (manager:Person {id:15}), (employee:Person {id:17}) CREATE (employee)-[:REPORTS_TO]->(manager);
+MATCH (manager:Person {id:15}), (employee:Person {id:18}) CREATE (employee)-[:REPORTS_TO]->(manager);
+MATCH (manager:Person {id:20}), (employee:Person {id:19}) CREATE (employee)-[:REPORTS_TO]->(manager);
+MATCH (manager:Person {id:21}), (employee:Person {id:22}) CREATE (employee)-[:REPORTS_TO]->(manager);
+MATCH (manager:Person {id:21}), (employee:Person {id:23}) CREATE (employee)-[:REPORTS_TO]->(manager);
