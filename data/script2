@@ -1,0 +1,52 @@
+// This script assumes that Script 1 has already been run.
+
+// 1. Assign skills to people with a 'level' property and `last_used` date
+MATCH (p:Person {id:1}), (s:Competency {id:'S02'}) CREATE (p)-[:HAS_COMPETENCY {level: 'Expert', last_used: '2023-01-01'}]->(s);
+MATCH (p:Person {id:1}), (s:Competency {id:'S03'}) CREATE (p)-[:HAS_COMPETENCY {level: 'Advanced', last_used: '2023-01-01'}]->(s);
+MATCH (p:Person {id:2}), (s:Competency {id:'S01'}) CREATE (p)-[:HAS_COMPETENCY {level: 'Advanced', last_used: '2022-10-25'}]->(s);
+MATCH (p:Person {id:3}), (s:Competency {id:'S01'}) CREATE (p)-[:HAS_COMPETENCY {level: 'Intermediate', last_used: '2022-12-15'}]->(s);
+MATCH (p:Person {id:4}), (s:Competency {id:'S02'}) CREATE (p)-[:HAS_COMPETENCY {level: 'Beginner', last_used: '2023-02-20'}]->(s);
+MATCH (p:Person {id:5}), (s:Competency {id:'S02'}) CREATE (p)-[:HAS_COMPETENCY {level: 'Intermediate', last_used: '2022-11-01'}]->(s);
+MATCH (p:Person {id:6}), (s:Competency {id:'S01'}) CREATE (p)-[:HAS_COMPETENCY {level: 'Advanced', last_used: '2023-01-10'}]->(s);
+MATCH (p:Person {id:7}), (s:Competency {id:'S01'}) CREATE (p)-[:HAS_COMPETENCY {level: 'Intermediate', last_used: '2023-01-05'}]->(s);
+MATCH (p:Person {id:8}), (s:Competency {id:'S02'}) CREATE (p)-[:HAS_COMPETENCY {level: 'Advanced', last_used: '2022-11-20'}]->(s);
+MATCH (p:Person {id:9}), (s:Competency {id:'S02'}) CREATE (p)-[:HAS_COMPETENCY {level: 'Beginner', last_used: '2023-03-01'}]->(s);
+MATCH (p:Person {id:10}), (s:Competency {id:'S06'}) CREATE (p)-[:HAS_COMPETENCY {level: 'Expert', last_used: '2023-01-15'}]->(s);
+MATCH (p:Person {id:11}), (s:Competency {id:'S06'}) CREATE (p)-[:HAS_COMPETENCY {level: 'Advanced', last_used: '2022-12-05'}]->(s);
+MATCH (p:Person {id:12}), (s:Competency {id:'S06'}) CREATE (p)-[:HAS_COMPETENCY {level: 'Intermediate', last_used: '2023-02-10'}]->(s);
+MATCH (p:Person {id:13}), (s:Competency {id:'S06'}) CREATE (p)-[:HAS_COMPETENCY {level: 'Beginner', last_used: '2022-11-25'}]->(s);
+MATCH (p:Person {id:14}), (s:Competency {id:'S04'}) CREATE (p)-[:HAS_COMPETENCY {level: 'Advanced', last_used: '2023-01-20'}]->(s);
+MATCH (p:Person {id:15}), (s:Competency {id:'S07'}) CREATE (p)-[:HAS_COMPETENCY {level: 'Expert', last_used: '2023-01-25'}]->(s);
+MATCH (p:Person {id:16}), (s:Competency {id:'S07'}) CREATE (p)-[:HAS_COMPETENCY {level: 'Advanced', last_used: '2022-12-10'}]->(s);
+MATCH (p:Person {id:17}), (s:Competency {id:'S07'}) CREATE (p)-[:HAS_COMPETENCY {level: 'Intermediate', last_used: '2023-02-05'}]->(s);
+MATCH (p:Person {id:18}), (s:Competency {id:'S08'}) CREATE (p)-[:HAS_COMPETENCY {level: 'Advanced', last_used: '2022-11-15'}]->(s);
+MATCH (p:Person {id:19}), (s:Competency {id:'S08'}) CREATE (p)-[:HAS_COMPETENCY {level: 'Intermediate', last_used: '2023-01-30'}]->(s);
+MATCH (p:Person {id:20}), (s:Competency {id:'S08'}) CREATE (p)-[:HAS_COMPETENCY {level: 'Advanced', last_used: '2022-12-20'}]->(s);
+MATCH (p:Person {id:21}), (s:Competency {id:'S03'}) CREATE (p)-[:HAS_COMPETENCY {level: 'Expert', last_used: '2023-03-05'}]->(s);
+MATCH (p:Person {id:22}), (s:Competency {id:'S08'}) CREATE (p)-[:HAS_COMPETENCY {level: 'Intermediate', last_used: '2022-10-01'}]->(s);
+MATCH (p:Person {id:23}), (s:Competency {id:'S08'}) CREATE (p)-[:HAS_COMPETENCY {level: 'Beginner', last_used: '2023-02-15'}]->(s);
+MATCH (p:Person {id:23}), (s:Competency {id:'S04'}) CREATE (p)-[:HAS_COMPETENCY {level: 'Beginner', last_used: '2023-02-15'}]->(s);
+
+// 2. Add 'worked_with' relationships to track project collaboration
+MATCH (p1:Person {id:2}), (p2:Person {id:3}), (j:Project {id:'J01'}) CREATE (p1)-[:WORKED_WITH {project: 'J01', start_date: '2023-01-10'}]->(p2);
+MATCH (p1:Person {id:2}), (p2:Person {id:4}), (j:Project {id:'J01'}) CREATE (p1)-[:WORKED_WITH {project: 'J01', start_date: '2023-01-10'}]->(p2);
+MATCH (p1:Person {id:5}), (p2:Person {id:7}), (j:Project {id:'J02'}) CREATE (p1)-[:WORKED_WITH {project: 'J02', start_date: '2023-03-01'}]->(p2);
+MATCH (p1:Person {id:11}), (p2:Person {id:12}), (j:Project {id:'J03'}) CREATE (p1)-[:WORKED_WITH {project: 'J03', start_date: '2023-05-01'}]->(p2);
+MATCH (p1:Person {id:16}), (p2:Person {id:17}), (j:Project {id:'J04'}) CREATE (p1)-[:WORKED_WITH {project: 'J04', start_date: '2023-01-01'}]->(p2);
+
+// 3. Add 'referred_by' relationships with a bonus property
+MATCH (referrer:Person {id:2}), (new_hire:Person {id:5}) CREATE (new_hire)-[:REFERRED_BY {bonus_paid: true, date: '2022-09-12'}]->(referrer);
+MATCH (referrer:Person {id:10}), (new_hire:Person {id:13}) CREATE (new_hire)-[:REFERRED_BY {bonus_paid: true, date: '2021-08-09'}]->(referrer);
+MATCH (referrer:Person {id:15}), (new_hire:Person {id:18}) CREATE (new_hire)-[:REFERRED_BY {bonus_paid: false, date: '2021-04-25'}]->(referrer);
+MATCH (referrer:Person {id:20}), (new_hire:Person {id:19}) CREATE (new_hire)-[:REFERRED_BY {bonus_paid: true, date: '2022-02-19'}]->(referrer);
+
+// 4. Add new relationships for professional development and social connections
+MATCH (manager:Person {id:1}), (employee:Person {id:3}) CREATE (manager)-[:MENTORS]->(employee);
+MATCH (manager:Person {id:6}), (employee:Person {id:8}) CREATE (manager)-[:MENTORS]->(employee);
+MATCH (trainer:Person {id:2}), (trainee:Person {id:4}) CREATE (trainer)-[:TRAINS_ON {skill: 'S01'}]->(trainee);
+MATCH (trainer:Person {id:10}), (trainee:Person {id:11}) CREATE (trainer)-[:TRAINS_ON {skill: 'S06'}]->(trainee);
+MATCH (p1:Person {id:7}), (p2:Person {id:9}) CREATE (p1)-[:FRIENDS_WITH]->(p2), (p2)-[:FRIENDS_WITH]->(p1);
+MATCH (p1:Person {id:11}), (p2:Person {id:14}) CREATE (p1)-[:FRIENDS_WITH]->(p2), (p2)-[:FRIENDS_WITH]->(p1);
+MATCH (p1:Person {id:16}), (p2:Person {id:18}) CREATE (p1)-[:FRIENDS_WITH]->(p2), (p2)-[:FRIENDS_WITH]->(p1);
+MATCH (p1:Person {id:2}), (p2:Person {id:8}) CREATE (p1)-[:FRIENDS_WITH]->(p2), (p2)-[:FRIENDS_WITH]->(p1);
+MATCH (p1:Person {id:10}), (p2:Person {id:21}) CREATE (p1)-[:FRIENDS_WITH]->(p2), (p2)-[:FRIENDS_WITH]->(p1);
