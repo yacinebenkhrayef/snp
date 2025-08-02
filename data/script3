@@ -1,0 +1,38 @@
+// This script assumes that Scripts 1 and 2 have already been run.
+
+// 1. Add new properties to existing Person nodes
+MATCH (p:Person {id:1}) SET p.salary = 125000, p.employee_status = 'Full-Time';
+MATCH (p:Person {id:2}) SET p.salary = 95000, p.employee_status = 'Full-Time';
+MATCH (p:Person {id:3}) SET p.salary = 88000, p.employee_status = 'Full-Time';
+MATCH (p:Person {id:4}) SET p.salary = 78000, p.employee_status = 'Full-Time';
+MATCH (p:Person {id:5}) SET p.salary = 72000, p.employee_status = 'Full-Time';
+MATCH (p:Person {id:6}) SET p.salary = 115000, p.employee_status = 'Full-Time';
+MATCH (p:Person {id:7}) SET p.salary = 98000, p.employee_status = 'Full-Time';
+MATCH (p:Person {id:8}) SET p.salary = 90000, p.employee_status = 'Full-Time';
+MATCH (p:Person {id:9}) SET p.salary = 82000, p.employee_status = 'Full-Time';
+MATCH (p:Person {id:10}) SET p.salary = 135000, p.employee_status = 'Full-Time';
+MATCH (p:Person {id:11}) SET p.salary = 108000, p.employee_status = 'Full-Time';
+MATCH (p:Person {id:12}) SET p.salary = 98000, p.employee_status = 'Full-Time';
+MATCH (p:Person {id:13}) SET p.salary = 90000, p.employee_status = 'Full-Time';
+MATCH (p:Person {id:14}) SET p.salary = 102000, p.employee_status = 'Full-Time';
+MATCH (p:Person {id:15}) SET p.salary = 145000, p.employee_status = 'Full-Time';
+MATCH (p:Person {id:16}) SET p.salary = 118000, p.employee_status = 'Full-Time';
+MATCH (p:Person {id:17}) SET p.salary = 108000, p.employee_status = 'Full-Time';
+MATCH (p:Person {id:18}) SET p.salary = 98000, p.employee_status = 'Full-Time';
+MATCH (p:Person {id:19}) SET p.salary = 88000, p.employee_status = 'Full-Time';
+MATCH (p:Person {id:20}) SET p.salary = 128000, p.employee_status = 'Full-Time';
+MATCH (p:Person {id:21}) SET p.salary = 110000, p.employee_status = 'Full-Time';
+MATCH (p:Person {id:22}) SET p.salary = 95000, p.employee_status = 'Full-Time';
+MATCH (p:Person {id:23}) SET p.salary = 85000, p.employee_status = 'Full-Time';
+
+// 2. Add an 'end_date' to a project and an 'endDate' to the relationship
+MATCH (p:Person)-[w:WORKS_ON]->(j:Project {id:'J04'})
+SET j.end_date = '2023-03-31', w.end_date = '2023-03-31';
+
+// 3. Add a 'bonus_paid' property to an existing relationship
+MATCH (p:Person {id:15})<-[r:REFERRED_BY]-(new_hire:Person {id:18})
+SET r.bonus_paid = true;
+
+// 4. Add a new 'previous_role' relationship to model career progression
+MATCH (p:Person {id:10}), (r:Role {id:'R04'})
+CREATE (p)-[:PREVIOUS_ROLE {end_date: '2020-05-14'}]->(r);
