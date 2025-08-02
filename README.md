@@ -55,3 +55,30 @@ Enables Machine Learning:
 The dataset is well-structured to serve as a foundation for machine learning models, particularly for predicting attrition or understanding the drivers of high performance_rating.
 
 In short, the dataset is a powerful tool for any project aiming to explore the intricacies of human resources data and derive actionable insights from it.
+
+
+
+
+## HIGH-VALUE HR ANALYTICS
+
+### Objective:
+Uncover hidden patterns in hiring, team dynamics, and employee mobility
+
+###### 1. OVERVIEW & SKILL ANALYSIS
+###### 2. TEAM DYNAMICS & ORGANIZATIONAL STRUCTURE
+###### 3. EMPLOYEE MOBILITY & CAREER PATHS
+###### 4. HIRING BOTTLENECKS & RECRUITMENT ANALYSIS
+###### 5. INFLUENCERS & KNOWLEDGE HUBS
+###### 6. ADDITIONAL ANALYTICS
+
+
+
+
+
+
+
+
+
+
+
+
