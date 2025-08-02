@@ -1,0 +1,227 @@
+// =============================================================================
+// HIGH-VALUE HR ANALYTICS QUERIES
+// Objective: Uncover hidden patterns in hiring, team dynamics, and employee mobility
+// =============================================================================
+
+
+// -----------------------------------------------------------------------------
+// 1. OVERVIEW & SKILL ANALYSIS
+// -----------------------------------------------------------------------------
+
+// Query 1.1: Identify the top 5 most common "Expert" skills among top performers.
+// This helps define the key competencies of successful employees.
+MATCH (p:Person)-[h:HAS_COMPETENCY {level: 'Expert'}]->(s:Competency)
+WHERE p.performance_rating = 4
+RETURN s.name AS SkillName, count(p) AS TopPerformersWithSkill
+ORDER BY TopPerformersWithSkill DESC
+LIMIT 5;
+
+// Query 1.2: Find employees with "Advanced" skills that haven't been used in over a year.
+// This helps identify underutilized talent and potential engagement issues.
+MATCH (p:Person)-[h:HAS_COMPETENCY {level: 'Advanced'}]->(s:Competency)
+WHERE h.last_used IS NOT NULL AND date(h.last_used) < date() - duration({years: 1})
+RETURN p.first_name, p.last_name, s.name AS UnderutilizedSkill, h.last_used AS LastUsedDate;
+
+// Query 1.3 (CORRECTED AGAIN): Compare the average performance rating of employees with and without the most common "Expert" skill.
+// This is a generalized version that will work with any dataset containing expert skills.
+// The original query had a variable scope issue. This corrected version ensures
+// the 's' variable (the most common skill node) is carried through the query.
+MATCH (p:Person)-[:HAS_COMPETENCY {level: 'Expert'}]->(s:Competency)
+WITH s, count(p) AS Count
+ORDER BY Count DESC
+LIMIT 1
+WITH s AS TopSkill, s.name AS TopSkillName
+MATCH (p1:Person)-[:HAS_COMPETENCY {level: 'Expert'}]->(TopSkill)
+WITH TopSkillName, avg(p1.performance_rating) AS AvgPerfWithSkill, TopSkill
+MATCH (p2:Person)
+WHERE NOT (p2)-[:HAS_COMPETENCY]->(TopSkill)
+RETURN
+    TopSkillName,
+    AvgPerfWithSkill,
+    avg(p2.performance_rating) AS AvgPerfWithoutSkill;
+
+
+
+// Query 1.4: Compare the average performance rating for a user-specified "Expert" skill.
+// Change 'Cypher' to any 'Expert' skill name you know exists in your dataset.
+WITH 'Cypher' AS targetSkill
+MATCH (p1:Person)-[:HAS_COMPETENCY {level: 'Expert'}]->(s:Competency {name: targetSkill})
+WITH targetSkill, avg(p1.performance_rating) AS AvgPerfWithSkill
+MATCH (p2:Person)
+WHERE NOT (p2)-[:HAS_COMPETENCY]->(s)
+RETURN
+    targetSkill,
+    AvgPerfWithSkill,
+    avg(p2.performance_rating) AS AvgPerfWithoutSkill;
+
+
+// -----------------------------------------------------------------------------
+// 2. TEAM DYNAMICS & ORGANIZATIONAL STRUCTURE
+// -----------------------------------------------------------------------------
+
+// Query 2.1: Rank departments by average work-life balance and job satisfaction.
+// This is a direct measure of team health and cultural fit.
+MATCH (d:Department)<-[:IS_IN_DEPARTMENT]-(p:Person)
+RETURN
+  d.name AS Department,
+  avg(p.work_life_balance) AS AvgWorkLifeBalance,
+  avg(p.job_satisfaction) AS AvgJobSatisfaction
+ORDER BY AvgJobSatisfaction DESC, AvgWorkLifeBalance DESC;
+
+// Query 2.2: Identify potential team silos by finding teams with low cross-departmental project collaboration.
+// A low score may indicate a need for more cross-functional initiatives.
+MATCH (t:Team)<-[:IS_MEMBER_OF]-(p:Person)
+WITH t, p
+OPTIONAL MATCH (p)-[:WORKED_WITH]-(other:Person)-[:IS_IN_DEPARTMENT]->(otherDept)
+WHERE NOT (p)-[:IS_IN_DEPARTMENT]->(otherDept)
+WITH t, count(other) AS CrossDepartmentalCollaborations
+RETURN t.name AS Team, CrossDepartmentalCollaborations
+ORDER BY CrossDepartmentalCollaborations ASC
+LIMIT 5;
+
+// Query 2.3: Find the average job satisfaction and work-life balance for direct reports of each manager.
+// This is a powerful way to evaluate manager effectiveness and its impact on employee well-being.
+MATCH (manager:Person)<-[:REPORTS_TO]-(employee:Person)
+RETURN
+  manager.first_name + " " + manager.last_name AS Manager,
+  avg(employee.job_satisfaction) AS AvgReportJobSatisfaction,
+  avg(employee.work_life_balance) AS AvgReportWorkLifeBalance,
+  count(employee) AS NumberOfReports
+ORDER BY AvgReportJobSatisfaction ASC, AvgReportWorkLifeBalance ASC;
+
+
+// -----------------------------------------------------------------------------
+// 3. EMPLOYEE MOBILITY & CAREER PATHS
+// -----------------------------------------------------------------------------
+
+// Query 3.1: Analyze the attrition rate for employees with over 5 years at the company.
+// This targets long-term employee retention.
+MATCH (p:Person)
+WHERE p.years_at_company > 5
+RETURN
+  p.years_at_company AS YearsAtCompany,
+  toFloat(count(CASE WHEN p.attrition = true THEN 1 ELSE null END)) / count(p) AS AttritionRate
+ORDER BY YearsAtCompany DESC;
+
+// Query 3.2: Find high-performing employees who haven't been promoted in a while.
+// These individuals may be flight risks due to a perceived lack of career progression.
+MATCH (p:Person)
+WHERE p.performance_rating >= 4 AND p.years_since_last_promotion > 2
+RETURN
+  p.first_name,
+  p.last_name,
+  p.years_since_last_promotion,
+  p.performance_rating,
+  p.job_satisfaction
+ORDER BY p.years_since_last_promotion DESC
+LIMIT 5;
+
+// Query 3.3: Trace the full career path of a specific employee.
+// This demonstrates how a graph can model and visualize a person's entire journey in the company.
+MATCH p = (start:Person {id: 10})-[:HOLDS_ROLE|PREVIOUS_ROLE*]->(end:Role)
+RETURN p;
+
+
+// -----------------------------------------------------------------------------
+// 4. HIRING BOTTLENECKS & RECRUITMENT ANALYSIS
+// -----------------------------------------------------------------------------
+
+// Query 4.1: Find managers with a high attrition rate among their direct reports.
+// This helps identify potential issues with management style or team environment.
+MATCH (manager:Person)<-[:REPORTS_TO]-(employee:Person)
+WHERE employee.attrition = true
+WITH manager, count(employee) AS AttritionCount
+RETURN manager.first_name, manager.last_name, AttritionCount
+ORDER BY AttritionCount DESC;
+
+// Query 4.2: Analyze the attrition rate of new hires (less than 2 years) by department.
+// This can highlight issues with onboarding or departmental culture.
+MATCH (d:Department)
+OPTIONAL MATCH (d)<-[:IS_IN_DEPARTMENT]-(p:Person)
+WHERE p.years_at_company < 2
+WITH d.name AS Department,
+     count(p) AS TotalNewHires,
+     count(CASE WHEN p.attrition = true THEN 1 ELSE null END) AS AttritedNewHires
+RETURN
+  Department,
+  TotalNewHires,
+  AttritedNewHires,
+  CASE
+    WHEN TotalNewHires = 0 THEN 0.0
+    ELSE toFloat(AttritedNewHires) / toFloat(TotalNewHires)
+  END AS NewHireAttritionRate
+ORDER BY NewHireAttritionRate DESC
+
+
+// Query 4.3: Compare attrition rates for referred vs. non-referred employees.
+// This assesses the effectiveness of the referral program as a retention tool.
+MATCH (p:Person)
+RETURN
+  "Referred" AS EmployeeType,
+  toFloat(count(CASE WHEN p.attrition = true AND (p)-[:REFERRED_BY]->() THEN 1 ELSE null END)) / count(p) AS AttritionRate
+UNION ALL
+MATCH (p:Person)
+WHERE NOT (p)-[:REFERRED_BY]->()
+RETURN
+  "Non-Referred" AS EmployeeType,
+  toFloat(count(CASE WHEN p.attrition = true THEN 1 ELSE null END)) / count(p) AS AttritionRate;
+
+
+// -----------------------------------------------------------------------------
+// 5. INFLUENCERS & KNOWLEDGE HUBS
+// -----------------------------------------------------------------------------
+
+// Query 5.1: Find the top 5 most connected people in the social graph (`FRIENDS_WITH`).
+// These individuals are key to information flow and company culture.
+MATCH (p1:Person)-[:FRIENDS_WITH]-(p2:Person)
+WITH p1, count(p2) AS FriendCount
+RETURN p1.first_name, p1.last_name, FriendCount
+ORDER BY FriendCount DESC
+LIMIT 5;
+
+// Query 5.2: Identify "Knowledge Hubs" who are both mentors and trainers.
+// These people are central to the company's informal learning and development.
+MATCH (p:Person)-[:MENTORS|TRAINS_ON]->(o:Person)
+WITH p, count(o) AS Connections
+RETURN
+  p.first_name,
+  p.last_name,
+  Connections AS MentorshipAndTrainingCount
+ORDER BY Connections DESC
+LIMIT 5;
+
+// Query 5.3: Identify employees who are being mentored or trained by multiple people.
+// These are individuals the company is investing in heavily.
+MATCH (p:Person)<-[:MENTORS|TRAINS_ON]-(mentor_or_trainer:Person)
+WITH p, count(mentor_or_trainer) AS NumberOfMentorsAndTrainers
+RETURN
+  p.first_name,
+  p.last_name,
+  NumberOfMentorsAndTrainers
+ORDER BY NumberOfMentorsAndTrainers DESC
+LIMIT 5;
+
+
+// -----------------------------------------------------------------------------
+// 6. ADDITIONAL ANALYTICS
+// -----------------------------------------------------------------------------
+
+// Query 6.1: Identify projects with the most cross-departmental collaboration.
+// A measure of project integration and organizational health.
+MATCH (p:Project)
+OPTIONAL MATCH (p)<-[:WORKED_WITH]-(person:Person)-[:IS_IN_DEPARTMENT]->(d:Department)
+WITH p.name AS ProjectName, count(DISTINCT d) AS NumberOfCollaboratingDepartments
+RETURN ProjectName, NumberOfCollaboratingDepartments
+ORDER BY NumberOfCollaboratingDepartments DESC;
+
+// Query 6.2: Analyze the distribution of job satisfaction across different education levels.
+// This helps to see if education is a factor in employee happiness.
+MATCH (p:Person)
+RETURN p.education_level, avg(p.job_satisfaction) AS AvgJobSatisfaction
+ORDER BY AvgJobSatisfaction DESC;
+
+// Query 6.3: Find the shortest path between two employees (e.g., in a social network).
+// This can be used to visualize informal communication channels.
+MATCH (p1:Person {first_name: 'Mike'}), (p2:Person {first_name: 'Jon'})
+MATCH path = shortestPath((p1)-[:REPORTS_TO|FRIENDS_WITH|WORKED_WITH*]-(p2))
+RETURN path;
